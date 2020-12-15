@@ -17,3 +17,14 @@ def login(username=None, password=None):
     g = Geocaching()
     g.login(username, password)
     return g
+
+def login_with_token(token=None):
+    """A shortcut for user login.
+
+    Create a :class:`.Geocaching` instance and try to login a user. See :meth:`.Geocaching.login`.
+
+    :return: Created :class:`.Geocaching` instance.
+    """
+    g = Geocaching()
+    g.login_with_token(token)
+    return g
