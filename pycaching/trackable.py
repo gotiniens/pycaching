@@ -2,6 +2,7 @@
 
 from pycaching import errors
 from pycaching.util import lazy_loaded, format_date
+import logging
 
 # prefix _type() function to avoid collisions with trackable type
 _type = type
@@ -185,7 +186,12 @@ class Trackable(object):
         # parse data
         self.tid = root.find("span", "CoordInfoCode").text
         self.name = root.find(id="ctl00_ContentBody_lbHeading").text
-        self.type = root.find(id="ctl00_ContentBody_BugTypeImage").get("alt")
+        try:
+            self.type = root.find(id="ctl00_ContentBody_BugTypeImage").get("alt")
+        except(TypeError, KeyError, AttributeError) as e:
+            logging.debug("BugType not found: "+str(e))
+            self.type = "Unknown"
+            pass
         self.owner = root.find(id="ctl00_ContentBody_BugDetails_BugOwner").text
         self.goal = root.find(id="TrackableGoal").text
         self.description = root.find(id="TrackableDetails").text
