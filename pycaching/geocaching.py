@@ -93,6 +93,23 @@ class Geocaching(object):
 
             raise Error("Cannot load page: {}".format(url)) from e
 
+    def login_with_token(self, token=None):
+        if token:
+            logging.debug("Using Token for login.")
+            cookie_obj = requests.cookies.create_cookie(domain='.geocaching.com',name='gspkauth',value=token)
+            self._session.cookies.set_cookie(cookie_obj)
+            logging.debug("Checking the result.")
+            logged_user = self.get_logged_user()
+            if logged_user:
+                logging.info("Logged in successfully as {}.".format(logged_user))
+                self._logged_in = True
+                self._logged_username = logged_user
+                return
+            else:
+                self.logout()
+                raise LoginFailedException("Cannot login to the site "
+                                       "(probably wrong username or password).")
+                
     def login(self, username=None, password=None):
         """Log in the user for this instance of Geocaching.
 
