@@ -19,7 +19,7 @@ def login(username=None, password=None):
     return g
 
 def login_with_token(token=None):
-    """A shortcut for user login.
+    """A shortcut for user login using an token.
 
     Create a :class:`.Geocaching` instance and try to login a user. See :meth:`.Geocaching.login`.
 
